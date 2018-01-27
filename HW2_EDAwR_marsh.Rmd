@@ -157,8 +157,8 @@ str(county_df)
 str(county_MI)
 # The Michigan-only data has a column for peninsula, and the County, State,  CensusId, State.Code, Region, and Division columns are in a different order
 
-sum(is.na(county_df))
-sum(is.na(county_MI))
+sum(is.na(county_df)) # Yes, there are three NA values in this data set
+sum(is.na(county_MI)) # No, there are no NA values in this data set
 
 ```
 ```{r}
@@ -182,15 +182,29 @@ income for the entire US.
 Write a short paragraph describing the distribution of median incomes.
 
 ```{r}
-# ggplot(???) + geom_histogram(???)
+g <- ggplot(data = county_df) 
+
+g + geom_histogram(aes(x = Income))
+
+g + geom_boxplot(aes(y = Income, x = 1)) 
+
+g + geom_density(aes(x = Income), fill="grey50")
+
+g + geom_violin(aes(y = Income, x = 1)) 
+
 ```
+
+Median Income Analysis
+Nearly all counties have a median income between 25,000 and 75,000, though there are a few dozen outliers with larger median incomes up to 125,000. 
+50% of counties have median incomes between 37,000 and 55,000. 
+
 
 ### Problem 3 - Histogram of total population
 
 Create a histogram of total population for counties in the US.
 
 ```{r histo_totpop}
-
+g + geom_histogram(aes(x = TotalPop))
 ```
 
 Repeat the histogram about but make the following style changes to the plot.
@@ -201,7 +215,7 @@ Repeat the histogram about but make the following style changes to the plot.
 * Change the colors of the bars to something other than the default black
 
 ```{r histo_stylechanges}
-
+g + geom_histogram(aes(x = TotalPop), fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties")
 ```
 
 **Hacker Extra** - Also create a kernel density plot overlaid on a histogram of
@@ -210,7 +224,12 @@ Income.
 Repeat the histogram but only for counties with less than 2.5 million people.
 
 ```{r histo_lt2.5m}
+g + geom_histogram(aes(x = TotalPop), fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties") + geom_density(aes(x = TotalPop), fill = "grey50")
 
+smaller <- county_df %>%
+  filter(TotalPop < 2500000)
+
+ggplot(data = smaller, aes(x = TotalPop)) + geom_histogram(fill = "blue") + labs(title = "Distribution of non-outlier population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
 ```
 
 
@@ -224,6 +243,11 @@ differ with respect to distribution of median income over the counties?
 
 
 ```{r bp_inc_by_peninsula}
+
+
+
+
+
 
 ```
 
