@@ -40,7 +40,8 @@ Create a new R Project based on this working directory.
 **Hacker Extra** - Put this project folder under version control using git. Only
 track the .R file, the .Rmd file and your .gitignore file. Create a remote repo
 for this homework assignment in your GitHub account. Periodically push your commits
-to GitHub. When done with the assignment, paste in the URL of your GitHub project
+to GitHub. 
+## When done with the assignment, paste in the URL of your GitHub project
 so that I can go look at it.
 
 ## Step 3 - Set working directory and explore data folder
@@ -142,8 +143,8 @@ You should read the **county.csv** file into a data frame named county_df and
 **county_MI.csv** into a data frame named county_MI.
 
 ```{r read_countydata}
-# county_df <- ???
-# county_MI <- ???
+county_df <- read.csv("data/county.csv", header = TRUE)
+county_MI <- read.csv("data/county_MI.csv", header = TRUE)
 ```
 
 Check the structure of each data.frame and use the `summary` function to begin
@@ -151,7 +152,19 @@ exploring the data. Are there any NA values? What
 differences do you notice between the structure of the two data frames.
 
 ```{r}
+str(county_df)
 
+str(county_MI)
+# The Michigan-only data has a column for peninsula, and the County, State,  CensusId, State.Code, Region, and Division columns are in a different order
+
+sum(is.na(county_df))
+sum(is.na(county_MI))
+
+```
+```{r}
+summary(county_df)
+
+summary(county_MI)
 ```
 
 The county_MI data frame contains data for Michigan only and includes an
