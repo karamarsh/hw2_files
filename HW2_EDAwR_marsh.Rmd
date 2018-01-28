@@ -243,20 +243,51 @@ differ with respect to distribution of median income over the counties?
 
 
 ```{r bp_inc_by_peninsula}
-
-
-
-
-
+ggplot(data = county_MI) + geom_boxplot(aes(y = Income, x = peninsula)) + 
+  labs(title = "Distribution of income by peninsula", y = "Income", x = "Peninsula")
 
 ```
+
+The income distribution is quite different between the peninsulas. 
+The 75th quantile of the Upper Peninsula is about the same as the 25th quantile 
+of the Lower Peninsula. The highest incomes in the UP are roughly 45,000 whereas
+in the Lower Peninsula, 25% of the median incomes are 50,000 or greater.
+One should also take into account that there are fewer counties in the UP 
+than in the LP. 
 
 Create several more boxplots showing how the peninsulas compare with respect to
 some of the other variables. Summarize your findings in a few short paragraphs.
 
 ```{r more_boxplots}
+ggplot(data = county_MI) + geom_boxplot(aes(y = Black, x = peninsula)) + 
+  labs(title = "Percent of population that is black by peninsula", y = "Black %", x = "Peninsula")
 
+ggplot(data = county_MI) + geom_boxplot(aes(y = IncomePerCap, x = peninsula)) + 
+  labs(title = "Distribution of income per capita by peninsula", y = "Income Per Person", x = "Peninsula")
+
+ggplot(data = county_MI) + geom_boxplot(aes(y = Poverty, x = peninsula)) + 
+  labs(title = "Percent of population in poverty by peninsula", y = "% in Poverty", x = "Peninsula")
+
+ggplot(data = county_MI) + geom_boxplot(aes(y = ChildPoverty, x = peninsula)) + 
+  labs(title = "Percent of children in poverty by peninsula", y = "% of Children in Poverty", x = "Peninsula")
+
+ggplot(data = county_MI) + geom_boxplot(aes(y = Production, x = peninsula)) + 
+  labs(title = "Production Worker percentage by peninsula", y = "Production %", x = "Peninsula")
+
+ggplot(data = county_MI) + geom_boxplot(aes(y = MeanCommute, x = peninsula)) + 
+  labs(title = "Distribution of mean commute by peninsula", y = "Commute time (mins)", x = "Peninsula")
 ```
+"Percent of population that is black by peninsula"
+"Distribution of income per capita by peninsula"
+"Percent of population in poverty by peninsula"
+"Percent of children in poverty by peninsula"
+"Production Worker percentage by peninsula"
+"Distribution of mean commute by peninsula"
+
+
+
+
+
 
 ### Problem 5 - How do regions of the country compare?
 
@@ -267,7 +298,14 @@ distribution of MeanCommute time. Make sure your graph has a title and good axis
 labels.
 
 ```{r faceted_histo}
+# I created this column to show the proportion of women to men
+county_df$WomenRatio <- county_df$Women/county_df$Men
 
+ggplot(data = county_df) + 
+  geom_histogram( aes(x = WomenRatio, y = ..density..), bins = 20) + 
+  geom_density(aes(x = WomenRatio)) +
+  facet_wrap( ~ Region) + labs(title = "Distribution of women to men ration by region", 
+            x = "Ratio of women to men", y = "Number of Counties")
 ```
 
 ### Problem 6 - Basic bar chart
@@ -276,7 +314,7 @@ Create a bar chart showing the number of counties by Region in the US. Make sure
 your graph has a title and good axis labels.
 
 ```{r bar_counties_by_region}
-
+ggplot(data = county_df) + geom_bar(aes(x = Region)) + labs(title = "Number of Counties by Region", y = "Number of Counties", x = "Region")
 ```
 
 ### Problem 7 - Basic scatter plots
@@ -285,14 +323,14 @@ Create a scatter plot using the Michigan only data frame comparing
 Income and MeanCommute.
 
 ```{r xy_inc_commute}
-
+ggplot(data = county_MI) + geom_point(aes(x = Income, y = MeanCommute))
 ```
 
 Create a modified version of the above scatter plot in which the point color
 is mapped to peninsula.
 
 ```{r xy_inc_commute_peninsula}
-
+ggplot(data = county_MI) + geom_point(aes(x = Income, y = MeanCommute, color = peninsula))
 ```
 
 Your thoughts on the relationship between these variables?
