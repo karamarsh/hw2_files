@@ -82,61 +82,6 @@ library(dplyr)
 library(ggplot2)
 ```
 
-## Step 1 - Familiarize yourself with the data and the assignment
-
-In this assignment you'll do some exploratory data analysis
-with R on a dataset US census information based on the [American Community Survey](https://www.census.gov/programs-surveys/acs/). The version of
-this data that we'll be using is from a Kaggle dataset. See
-https://www.kaggle.com/muonneutrino/us-census-demographic-data/data and look
-at the column metadata for the county level table to see what the various
-columns mean.
-
-As we did in class, you'll be creating an R Markdown document to
-both prepare a dataset and do some analysis as well as to document the
-steps you did (and answer some questions I'll throw at you).
-
-You'll notice a few "Hacker Extra" tasks
-thrown in. These are for those of you who want to go a little above and beyond
-and attempt some more challenging tasks. And, feel free to do a some free form
-Hacker Extra style work yourself - in other words, do something beyond what
-was asked. You'll learn more.
-
-## Step 2 - Create a new R Markdown document
-
-Save this file as a new R Markdown document and name it **HW2_EDAwR_[_your last name_].Rmd**. Mine would
-be called **HW2_EDAwR_isken.Rmd**. Save it into the same folder as this file. 
-
-This will be your working directory. 
-
-## Step 3 - Set working directory and explore data folder
-
-Set the working directory or create an R Studio project in the current folder. You'll notice that there is a folder named **data**.
-Inside of it you'll find the data files for this assignment:
-
-- **acs2015_census_tract_data.csv**
-- **acs2015_county_data.csv**
-- **us_census_bureau_regions_and_divisions.csv**
-- **county_MI.csv**
-
-The first two files are from the Kaggle site for this dataset.
-The last file, **county_MI.csv**, is a file that I created and just contains
-data from Michigan. The R script, **census_data_prep.R** was used to create
-the file as well as to merge information from the **us_census_bureau_regions_and_divisions.csv** file with the county data.
-
-You might want to use shell commands or a text editor like Geany to snoop the files a bit.
-
-
-## Step 4 - Complete the following R tasks and answer questions
-
-Now you'll need to complete the following tasks in R. Just like we did in class,
-you should use a combination of markdown text (be concise, no need to write tons
-of text) to explain what you are doing and R code chunks to actually do it. When
-you are done, use the "Knit" button to generate an HTML file from your R
-Markdown. You'll be submitting BOTH the completed R Markdown file as well as the
-generated HTML file. You'll notice that I've left some empty code chunks as well
-as some partially filled in code chunks. Of course, feel free to add more code
-chunks as needed.
-
 ### Problem 1 - Get the data into a dataframe
 
 You should read the **county.csv** file into a data frame named county_df and
@@ -153,19 +98,28 @@ differences do you notice between the structure of the two data frames.
 
 ```{r}
 str(county_df)
-
-str(county_MI)
-# The Michigan-only data has a column for peninsula, and the County, State,  CensusId, State.Code, Region, and Division columns are in a different order
-
-sum(is.na(county_df)) # Yes, there are three NA values in this data set
-sum(is.na(county_MI)) # No, there are no NA values in this data set
-
 ```
+
+```{r}
+str(county_MI)
+```
+
+The Michigan-only data has a column for peninsula, and the County, State,  
+CensusId, State.Code, Region, and Division columns are in a different order.
+The State, State.Code, Region, and Division columns all contain the same value.
+
 ```{r}
 summary(county_df)
+```
 
+The full data set has NA values in Income, Income Error, and Child Poverty columns
+
+```{r}
 summary(county_MI)
 ```
+
+The Michigan only dataset does not contain any NA values.
+
 
 The county_MI data frame contains data for Michigan only and includes an
 peninsula field. See **census_data_prep.R** to see how this field was
@@ -194,7 +148,7 @@ g + geom_violin(aes(y = Income, x = 1))
 
 ```
 
-Median Income Analysis
+#Median Income Analysis
 Nearly all counties have a median income between 25,000 and 75,000, though there are a few dozen outliers with larger median incomes up to 125,000. 
 50% of counties have median incomes between 37,000 and 55,000. 
 
@@ -224,12 +178,12 @@ Income.
 Repeat the histogram but only for counties with less than 2.5 million people.
 
 ```{r histo_lt2.5m}
-g + geom_histogram(aes(x = TotalPop), fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties") + geom_density(aes(x = TotalPop), fill = "grey50")
+ggplot(data = county_df, aes(x = Income, y = ..density..)) + geom_histogram(fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
 
 smaller <- county_df %>%
   filter(TotalPop < 2500000)
 
-ggplot(data = smaller, aes(x = TotalPop)) + geom_histogram(fill = "blue") + labs(title = "Distribution of non-outlier population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
+ggplot(data = smaller, aes(x = Income, y = ..density..)) + geom_histogram(fill = "blue") + labs(title = "Distribution of non-outlier population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
 ```
 
 
@@ -244,8 +198,7 @@ differ with respect to distribution of median income over the counties?
 
 ```{r bp_inc_by_peninsula}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Income, x = peninsula)) + 
-  labs(title = "Distribution of income by peninsula", y = "Income", x = "Peninsula")
-
+  labs(title = "Distribution of income by peninsula", y = "Median Income", x = "Peninsula")
 ```
 
 The income distribution is quite different between the peninsulas. 
@@ -259,31 +212,57 @@ Create several more boxplots showing how the peninsulas compare with respect to
 some of the other variables. Summarize your findings in a few short paragraphs.
 
 ```{r more_boxplots}
-ggplot(data = county_MI) + geom_boxplot(aes(y = Black, x = peninsula)) + 
-  labs(title = "Percent of population that is black by peninsula", y = "Black %", x = "Peninsula")
+ggplot(data = county_MI) + geom_boxplot(aes(y = Native, x = peninsula)) + 
+  labs(title = "Percent of population that is Native American by peninsula", y = "Native American %", x = "Peninsula")
+```
 
+The Upper Peninsula has a much greater percentage of Native American 
+residents in some of its counties than than the Lower Peninusula. The
+median percentage of the UP is greater than all but two counties in the
+Lower Peninsula.
+
+
+"Distribution of income per capita by peninsula"
+```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = IncomePerCap, x = peninsula)) + 
   labs(title = "Distribution of income per capita by peninsula", y = "Income Per Person", x = "Peninsula")
+```
 
+
+"Percent of population in poverty by peninsula"
+
+```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Poverty, x = peninsula)) + 
   labs(title = "Percent of population in poverty by peninsula", y = "% in Poverty", x = "Peninsula")
+```
 
+
+
+```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = ChildPoverty, x = peninsula)) + 
   labs(title = "Percent of children in poverty by peninsula", y = "% of Children in Poverty", x = "Peninsula")
+```
 
+The peninsulas are similar when it comes to the percent of children in 
+poverty, althought the Lower Peninsula has a greater range. Sadly, all
+counties in the UP have at least 15% of their children in poverty. Median
+poverty by peninsula is nearly the same, just under 25%.
+
+"Production Worker percentage by peninsula"
+```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Production, x = peninsula)) + 
   labs(title = "Production Worker percentage by peninsula", y = "Production %", x = "Peninsula")
 
-ggplot(data = county_MI) + geom_boxplot(aes(y = MeanCommute, x = peninsula)) + 
-  labs(title = "Distribution of mean commute by peninsula", y = "Commute time (mins)", x = "Peninsula")
 ```
-"Percent of population that is black by peninsula"
-"Distribution of income per capita by peninsula"
-"Percent of population in poverty by peninsula"
-"Percent of children in poverty by peninsula"
-"Production Worker percentage by peninsula"
+
+
 "Distribution of mean commute by peninsula"
 
+```{r}
+ggplot(data = county_MI) + geom_boxplot(aes(y = MeanCommute, x = peninsula)) + 
+  labs(title = "Distribution of mean commute by peninsula", y = "Commute time (mins)", x = "Peninsula")
+
+```
 
 
 
