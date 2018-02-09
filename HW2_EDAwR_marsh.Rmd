@@ -43,7 +43,7 @@ for this homework assignment in your GitHub account. Periodically push your comm
 to GitHub. 
 ## When done with the assignment, paste in the URL of your GitHub project
 so that I can go look at it.
-
+Do this
 ## Step 3 - Set working directory and explore data folder
 
 Set the working directory or create an R Studio project in the current folder. You'll notice that there is a folder named **data**.
@@ -112,7 +112,8 @@ The State, State.Code, Region, and Division columns all contain the same value.
 summary(county_df)
 ```
 
-The full data set has NA values in Income, Income Error, and Child Poverty columns
+The full data set has NA values in Income, Income Error, 
+and Child Poverty columns
 
 ```{r}
 summary(county_MI)
@@ -149,7 +150,8 @@ g + geom_violin(aes(y = Income, x = 1))
 ```
 
 #Median Income Analysis
-Nearly all counties have a median income between 25,000 and 75,000, though there are a few dozen outliers with larger median incomes up to 125,000. 
+Nearly all counties have a median income between 25,000 and 75,000, 
+though there are a few dozen outliers with larger median incomes up to 125,000. 
 50% of counties have median incomes between 37,000 and 55,000. 
 
 
@@ -169,7 +171,9 @@ Repeat the histogram about but make the following style changes to the plot.
 * Change the colors of the bars to something other than the default black
 
 ```{r histo_stylechanges}
-g + geom_histogram(aes(x = TotalPop), fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties")
+g + geom_histogram(aes(x = TotalPop), fill = "Blue") + 
+  labs(title = "Distribution of population for US counties", 
+       x ="Total Population", y = "Number of counties")
 ```
 
 **Hacker Extra** - Also create a kernel density plot overlaid on a histogram of
@@ -178,12 +182,20 @@ Income.
 Repeat the histogram but only for counties with less than 2.5 million people.
 
 ```{r histo_lt2.5m}
-ggplot(data = county_df, aes(x = Income, y = ..density..)) + geom_histogram(fill = "Blue") + labs(title = "Distribution of population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
+ggplot(data = county_df, aes(x = Income, y = ..density..)) + 
+  geom_histogram(fill = "Blue") + 
+  labs(title = "Distribution of income for US counties", 
+       x ="Income", y = "Number of counties") + 
+  geom_density()
 
 smaller <- county_df %>%
   filter(TotalPop < 2500000)
 
-ggplot(data = smaller, aes(x = Income, y = ..density..)) + geom_histogram(fill = "blue") + labs(title = "Distribution of non-outlier population for US counties", x ="Total Population", y = "Number of counties") + geom_density()
+ggplot(data = smaller, aes(x = Income, y = ..density..)) + 
+  geom_histogram(fill = "blue") + 
+  labs(title = "Distribution of income for US counties", x ="Income", 
+       y = "Number of counties") + 
+  geom_density()
 ```
 
 
@@ -198,7 +210,8 @@ differ with respect to distribution of median income over the counties?
 
 ```{r bp_inc_by_peninsula}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Income, x = peninsula)) + 
-  labs(title = "Distribution of income by peninsula", y = "Median Income", x = "Peninsula")
+  labs(title = "Distribution of income by peninsula", 
+       y = "Median Income", x = "Peninsula")
 ```
 
 The income distribution is quite different between the peninsulas. 
@@ -213,7 +226,8 @@ some of the other variables. Summarize your findings in a few short paragraphs.
 
 ```{r more_boxplots}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Native, x = peninsula)) + 
-  labs(title = "Percent of population that is Native American by peninsula", y = "Native American %", x = "Peninsula")
+  labs(title = "Percent of population that's Native American by peninsula", 
+       y = "Native American %", x = "Peninsula")
 ```
 
 The Upper Peninsula has a much greater percentage of Native American 
@@ -222,49 +236,49 @@ median percentage of the UP is greater than all but two counties in the
 Lower Peninsula.
 
 
-"Distribution of income per capita by peninsula"
 ```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = IncomePerCap, x = peninsula)) + 
-  labs(title = "Distribution of income per capita by peninsula", y = "Income Per Person", x = "Peninsula")
+  labs(title = "Distribution of income per capita by peninsula", 
+       y = "Income Per Person", x = "Peninsula")
 ```
+Income Per Person is slightly more even than Median Income between the 
+peninsulas. Here the median in the Lower Peninsula is equal equivalent
+to the 75th percentile in the Upper Peninsula. 
 
-
-"Percent of population in poverty by peninsula"
 
 ```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = Poverty, x = peninsula)) + 
-  labs(title = "Percent of population in poverty by peninsula", y = "% in Poverty", x = "Peninsula")
+  labs(title = "Percent of population in poverty by peninsula", 
+       y = "% in Poverty", x = "Peninsula")
 ```
 
-
+The 75th percentiles of poverty percentage are nearly the same between
+peninsulas. The Lower Peninsula has a wider spread, with outlier counties
+at 6% and 30%.
 
 ```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = ChildPoverty, x = peninsula)) + 
-  labs(title = "Percent of children in poverty by peninsula", y = "% of Children in Poverty", x = "Peninsula")
+  labs(title = "Percent of children in poverty by peninsula", 
+       y = "% of Children in Poverty", x = "Peninsula")
 ```
 
 The peninsulas are similar when it comes to the percent of children in 
 poverty, althought the Lower Peninsula has a greater range. Sadly, all
 counties in the UP have at least 15% of their children in poverty. Median
-poverty by peninsula is nearly the same, just under 25%.
+child poverty by peninsula is nearly the same, just under 25%.
 
-"Production Worker percentage by peninsula"
-```{r}
-ggplot(data = county_MI) + geom_boxplot(aes(y = Production, x = peninsula)) + 
-  labs(title = "Production Worker percentage by peninsula", y = "Production %", x = "Peninsula")
-
-```
-
-
-"Distribution of mean commute by peninsula"
 
 ```{r}
 ggplot(data = county_MI) + geom_boxplot(aes(y = MeanCommute, x = peninsula)) + 
-  labs(title = "Distribution of mean commute by peninsula", y = "Commute time (mins)", x = "Peninsula")
-
+  labs(title = "Distribution of mean commute by peninsula", 
+       y = "Commute time (mins)", x = "Peninsula")
 ```
 
-
+I was surprised to see that mean commute is lower in the Upper Peninsula.
+75% of counties in the Upper Peninsual have an average commute 
+time of 21 minutes or less. 75% of counties in the Lower Peninsula have
+an average commute time of 21 minutes or more. Perhaps this is because 
+there are fewer big cities into which people have long commutes.
 
 
 
@@ -281,19 +295,27 @@ labels.
 county_df$WomenRatio <- county_df$Women/county_df$Men
 
 ggplot(data = county_df) + 
-  geom_histogram( aes(x = WomenRatio, y = ..density..), bins = 20) + 
+  geom_histogram( aes(x = WomenRatio, y = ..density..), bins = 30) + 
   geom_density(aes(x = WomenRatio)) +
-  facet_wrap( ~ Region) + labs(title = "Distribution of women to men ration by region", 
-            x = "Ratio of women to men", y = "Number of Counties")
+  facet_wrap( ~ Region) + 
+  labs(title = "Distribution of women to men ration by region", 
+       x = "Ratio of women to men", y = "Number of Counties") +
+  xlim(0,1.5)
 ```
-
+Though there are no data points as low as 0 or as high as 1.5, I 
+changed the axis units in order to more clearly show where the 1.0 
+mark was.In the Northeast and the South, most counties have more 
+women than men. 
 ### Problem 6 - Basic bar chart
 
 Create a bar chart showing the number of counties by Region in the US. Make sure
 your graph has a title and good axis labels.
 
 ```{r bar_counties_by_region}
-ggplot(data = county_df) + geom_bar(aes(x = Region)) + labs(title = "Number of Counties by Region", y = "Number of Counties", x = "Region")
+ggplot(data = county_df) + 
+  geom_bar(aes(x = Region)) + 
+  labs(title = "Number of Counties by Region", 
+       y = "Number of Counties", x = "Region")
 ```
 
 ### Problem 7 - Basic scatter plots
@@ -309,17 +331,23 @@ Create a modified version of the above scatter plot in which the point color
 is mapped to peninsula.
 
 ```{r xy_inc_commute_peninsula}
-ggplot(data = county_MI) + geom_point(aes(x = Income, y = MeanCommute, color = peninsula))
+ggplot(data = county_MI) + 
+  geom_point(aes(x = Income, y = MeanCommute, color = peninsula))
 ```
 
 Your thoughts on the relationship between these variables?
+In the Upper Peninsula, jobs with longer mean commutes have lower income.
+This could represent areas where jobs are scarce, so you have to go farther
+to find any work. There seems to be a lot more variability in the Lower Peninsula.
 
 Now, create a few more scatter plots using variables of your choosing in which
 you facet by peninsula as well. How do the relationships compare across the
 peninsulas?
 
 ```{r xy_faceted_peninsula}
-
+# Do this
+ggplot(data = county_MI) + 
+  geom_point(aes(x = MeanCommute, y = FamilyWork, color = peninsula))
 ```
 
 
@@ -328,7 +356,8 @@ Now use the full US data frame.
 Create a scatter plot of TotalPop by Income.
 
 ```{r xy_pop_inc}
-
+ggplot(data = county_df) + 
+  geom_point(aes(x = Income, y = TotalPop))
 ```
 
 The widely varying values make this difficult to interpret in terms of looking
@@ -336,6 +365,18 @@ for patterns. So, figure out a way to either change the axis scales or
 the plotted data itself to use a base 10 logarithmic scale (or transform).
 Write a short paragraph on why one might want to use a log scale or log
 transform of data when plotting.
+```{r}
+ggplot(data = county_df) + 
+  geom_point(aes(x = log(Income), y = TotalPop))
+ggplot(data = county_df) + 
+  geom_point(aes(x = Income, y = log(TotalPop), color = Region))
+ggplot(data = county_df) + 
+  geom_point(aes(x = log(Income), y = log(TotalPop), color = Region))
+```
+When you have variables that have a very wide range, obvious patterns may not be visible 
+with a normal scale. Putting the variables into a log scale, makes patterns more obvious.
+In this case, putting both the scales into a log transform allows the greatest number
+of data points to be seen in the graph. 
 
 ### Hacker Extra - More analysis
 
@@ -343,3 +384,5 @@ Do some additional plotting to look for interesting patterns or relationships
 either in the full US dataset or the MI only dataset. In addition, try out
 some of ggplots additional features such as themes, axis formatting, gridline
 control, or others.
+
+Do this
