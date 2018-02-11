@@ -193,7 +193,7 @@ smaller <- county_df %>%
 
 ggplot(data = smaller, aes(x = Income, y = ..density..)) + 
   geom_histogram(fill = "blue") + 
-  labs(title = "Distribution of income for US counties", x ="Income", 
+  labs(title = "Distribution of income for US counties w/ Population < 2.5 mil", x ="Income", 
        y = "Number of counties") + 
   geom_density()
 ```
