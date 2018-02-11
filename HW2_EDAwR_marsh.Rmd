@@ -43,7 +43,8 @@ for this homework assignment in your GitHub account. Periodically push your comm
 to GitHub. 
 ## When done with the assignment, paste in the URL of your GitHub project
 so that I can go look at it.
-Do this
+Here is the [URL of my GitHub project](https://github.com/karamarsh/hw2_files).
+
 ## Step 3 - Set working directory and explore data folder
 
 Set the working directory or create an R Studio project in the current folder. You'll notice that there is a folder named **data**.
@@ -106,7 +107,8 @@ str(county_MI)
 
 The Michigan-only data has a column for peninsula, and the County, State,  
 CensusId, State.Code, Region, and Division columns are in a different order.
-The State, State.Code, Region, and Division columns all contain the same value.
+The State, State.Code, Region, and Division columns each contain only the 
+information for Michigan.
 
 ```{r}
 summary(county_df)
@@ -120,7 +122,6 @@ summary(county_MI)
 ```
 
 The Michigan only dataset does not contain any NA values.
-
 
 The county_MI data frame contains data for Michigan only and includes an
 peninsula field. See **census_data_prep.R** to see how this field was
@@ -149,10 +150,10 @@ g + geom_violin(aes(y = Income, x = 1))
 
 ```
 
-#Median Income Analysis
-Nearly all counties have a median income between 25,000 and 75,000, 
-though there are a few dozen outliers with larger median incomes up to 125,000. 
-50% of counties have median incomes between 37,000 and 55,000. 
+**Median Income Analysis**
+Nearly all counties have a median income between \$25,000 and \$75,000, 
+though there are a few dozen outliers with larger median incomes up to \$125,000. 
+50% of counties have median incomes between \$37,000 and \$55,000. 
 
 
 ### Problem 3 - Histogram of total population
@@ -281,7 +282,6 @@ an average commute time of 21 minutes or more. Perhaps this is because
 there are fewer big cities into which people have long commutes.
 
 
-
 ### Problem 5 - How do regions of the country compare?
 
 In county_df you'll see that there's a Region field. Create a set of faceted 
@@ -306,6 +306,7 @@ Though there are no data points as low as 0 or as high as 1.5, I
 changed the axis units in order to more clearly show where the 1.0 
 mark was.In the Northeast and the South, most counties have more 
 women than men. 
+
 ### Problem 6 - Basic bar chart
 
 Create a bar chart showing the number of counties by Region in the US. Make sure
@@ -349,7 +350,30 @@ peninsulas?
 ggplot(data = county_MI) + 
   geom_point(aes(x = MeanCommute, y = FamilyWork, color = peninsula))
 ```
+There does not seem to be an obvious relationship between percent of 
+population engaged in family work and the mean commute for the county. 
+The Upper Peninsula has one outlier county with 2% of its population 
+engaged in family work. This is more than twice the value of any other 
+county in Michigan. 
 
+```{r}
+ggplot(data = county_MI) + 
+  geom_point(aes(x = Income, y = PublicWork, color = peninsula))
+```
+Many counties in the Upper Peninsula have greater percentages of its workers 
+employed in public institutions. The UP has all of the counties with greater
+than 20% of the workforce engaged in public work. 
+
+```{r}
+ggplot(data = county_MI) + 
+  geom_point(aes(x = MeanCommute, y = Transit, color = peninsula))
+```
+Not too surprisingly, there are only a few counties in Michigan that have 
+geater than 2% of populations using mass transit to commute. I was surprised 
+that aside from the few outliers in the Lower Peninsula with greater than 1%,
+both the Upper Peninsula and Lower Peninsula counties have a similar spread 
+between 0% and 2%. I would have expected most UP countiees to be much closer 
+to zero.
 
 Now use the full US data frame.
 
@@ -374,9 +398,10 @@ ggplot(data = county_df) +
   geom_point(aes(x = log(Income), y = log(TotalPop), color = Region))
 ```
 When you have variables that have a very wide range, obvious patterns may not be visible 
-with a normal scale. Putting the variables into a log scale, makes patterns more obvious.
+with a normal scale. Putting the variables into a log scale makes patterns more obvious.
 In this case, putting both the scales into a log transform allows the greatest number
-of data points to be seen in the graph. 
+of data points to be seen in the graph. When we showed the regions as colors, we could 
+see more of the spread.  
 
 ### Hacker Extra - More analysis
 
@@ -385,4 +410,31 @@ either in the full US dataset or the MI only dataset. In addition, try out
 some of ggplots additional features such as themes, axis formatting, gridline
 control, or others.
 
-Do this
+```{r}
+ggplot(county_df) +
+  geom_point(aes(x = Unemployment, y = log(IncomePerCap),  color = Region)) + 
+  theme_light()
+```
+Generally unemployment is higher in counties where log of income per capita 
+is lower. Interestingly, we do not see any Northeast counties with 
+unemployment greater than 15%. 
+```{r}
+ggplot(county_df) +
+  geom_boxplot(aes(x = 1, y = Unemployment), fill = "wheat", line = "brown") +
+  xlim(0,2)+
+  facet_grid(~Region) + 
+  theme_minimal()
+```
+Using boxplots, we can confirm that no counties in the Northeast have 
+unemployment higher than 15%. surprisingly, the midwest has the lowest 
+median unemployment rate, despite ten outlier counties with unemployment 
+rates between 15% and 30%. 
+
+```{r}
+ggplot(county_MI) +
+  geom_violin(aes(x = 1, y = Unemployment), color = "pink") +
+  facet_grid(~peninsula)
+```
+We can see from these graphs that the midewest outliers with greater than 
+20% unemployment in the previous graph do not belong to Michigan, as no 
+county in Michigan has greater than 20% unemployment. 
